@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Vite build output (regenerate with: npm run build)
+dist/
+**/dist/
+build/
+
+# Local secrets - keep the *.example files
+.env
+**/.env
+
+# Logs and editor noise
+npm-debug.log*
+.DS_Store
+.vscode/
+.idea/

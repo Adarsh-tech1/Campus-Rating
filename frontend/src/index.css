@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   CAMPUSLY DESIGN SYSTEM
+   Tailwind v4 CSS-first theme. Every colour, font and type step below becomes a
+   utility (bg-forest, text-gold, text-hero …) so components stay pure Tailwind.
+   Custom CSS is reserved for what Tailwind cannot express: keyframes, the film
+   grain overlay and the animated link underline.
+   ========================================================================== */
+
+@theme {
+  /* ---- Type ------------------------------------------------------------ */
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
+
+  /* Editorial scale. The serif is for major headings only; everything else
+     uses the sans stack above. */
+  --text-hero: clamp(3.25rem, 7vw, 6.75rem);
+  --text-hero--line-height: 0.94;
+  --text-hero--letter-spacing: -0.03em;
+  --text-page: clamp(2.5rem, 5vw, 4.5rem);
+  --text-page--line-height: 0.98;
+  --text-page--letter-spacing: -0.025em;
+  --text-section: clamp(1.9rem, 3vw, 2.75rem);
+  --text-section--line-height: 1.05;
+  --text-section--letter-spacing: -0.02em;
+
+  /* ---- Greens ---------------------------------------------------------- */
+  --color-forest: #10251c; /* primary  */
+  --color-forest-deep: #0a1712; /* deepest  */
+  --color-forest-mid: #19382a; /* raised surfaces inside dark panels */
+
+  /* ---- Neutrals -------------------------------------------------------- */
+  --color-ivory: #f7f3ea;
+  --color-ivory-soft: #efe9dd;
+  --color-cream: #fcfaf5; /* warm white card surface */
+  --color-line: #d9d4c8;
+  --color-muted: #77766e;
+  --color-ink: #172018;
+
+  /* ---- Gold accent ----------------------------------------------------- */
+  --color-gold: #e7b83e;
+  --color-gold-bright: #f4c84a;
+  --color-gold-deep: #9c751a; /* readable gold text on ivory */
+  --color-gold-mist: #f8eed4; /* soft gold fill */
+
+  /* ---- Status ---------------------------------------------------------- */
+  --color-success: #3f6b4b;
+  --color-success-soft: #e6eee3;
+  --color-danger: #8c3b28;
+  --color-danger-soft: #f7e8e1;
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --animate-rise: rise 0.75s var(--ease-editorial) both;
+  --animate-fade: fade 0.5s var(--ease-soft) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.75rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, consistent keyboard focus everywhere. */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-gold-deep);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Dark panels get a brighter ring so focus stays visible on green. */
+  :where(.bg-forest, .bg-forest-deep, .bg-forest-mid)
+    :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline-color: var(--color-gold-bright);
+  }
+
+  ::selection {
+    background-color: var(--color-gold-mist);
+    color: var(--color-forest);
+  }
+
+  /* Remove the numeric spinners; they fight the editorial styling. */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  img {
+    /* Prevent layout shift while a card image is still decoding. */
+    background-color: var(--color-ivory-soft);
+  }
+}
+
+/* ==========================================================================
+   UTILITIES — only what Tailwind cannot express directly
+   ========================================================================== */
+
+/* Serif display tuning for Playfair Display. */
+@utility display-tight {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+
+/* Horizontal rule with a fading editorial edge. */
+@utility rule-fade {
+  background-image: linear-gradient(
+    to right,
+    var(--color-line),
+    transparent
+  );
+}
+
+/* Fine paper grain overlay for large dark hero surfaces. */
+@utility grain {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.3;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  }
+}
+
+/* Animated underline used by editorial nav and inline links. */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.4s var(--ease-editorial);
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* Slow, barely-there drift for full-bleed hero photography. */
+@utility drift {
+  animation: campusly-drift 28s ease-in-out infinite alternate;
+}
+
+@keyframes campusly-drift {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1.13);
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION — honour the OS preference everywhere.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
