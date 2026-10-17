@@ -50,6 +50,7 @@ Campusly/
 │   │   │   ├── ratingValidator.js
 │   │   │   ├── storeValidator.js
 │   │   │   └── validationMiddleware.js
+│   │   ├── app.js
 │   │   └── server.js
 │   ├── .env.example
 │   ├── .gitignore
@@ -290,7 +291,7 @@ Login tokens expire after one day. Logging out clears the token in the browser; 
 
 | Method | Endpoint | Access |
 | --- | --- | --- |
-| POST | `/api/auth/register` | Public; accepts `USER`, `STORE_OWNER`, or `ADMIN` |
+| POST | `/api/auth/register` | Public; creates `USER` or `STORE_OWNER` |
 | POST | `/api/auth/login` | Public |
 | GET | `/api/auth/profile` | Authenticated |
 | PUT | `/api/auth/change-password` | Authenticated |
@@ -319,8 +320,6 @@ Foreign keys maintain store ownership and remove ratings when the related user o
 
 ## Security note
 
-Public registration does not grant `ADMIN`. The API enforces the role allowlist, and the initial administrator is created with the one-time `create-admin` command. See [DEPLOYMENT.md](DEPLOYMENT.md) for the free Render and TiDB setup.
+Public registration does not grant `ADMIN`. The API enforces the role allowlist, and the initial administrator is created with the one-time `create-admin` command. See [DEPLOYMENT.md](DEPLOYMENT.md) for the free Vercel and TiDB setup.
 
 Never commit `backend/.env` or `frontend/.env`. Keep database credentials and the JWT secret private.
-#   C a m p u s - R a t i n g  
- 

@@ -2,7 +2,7 @@
   "name": "campus-rating-app",
   "version": "1.0.0",
   "description": "Campus Rating application backend",
-  "main": "src/server.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
@@ -10,7 +10,11 @@
   },
   "private": true,
   "type": "commonjs",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
+    "@vercel/functions": "^3.10.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
