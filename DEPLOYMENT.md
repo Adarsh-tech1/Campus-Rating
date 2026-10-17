@@ -2,17 +2,19 @@
 
 Campusly uses two Vercel projects from this GitHub repository: a static Vite frontend and a serverless Express API. TiDB Cloud Starter provides the MySQL-compatible database. Vercel Hobby is free for personal projects; TiDB Starter has a monthly free quota. Provider quotas and usage limits apply.
 
+The current production URLs are [campus-rating.vercel.app](https://campus-rating.vercel.app) and [campus-rating-api.vercel.app](https://campus-rating-api.vercel.app).
+
 ## 1. Create the database
 
-1. Create a MySQL-compatible TiDB Cloud Starter instance.
-2. In its **Connect** panel, choose the public endpoint and copy the host, port, username, password, and database name. The public endpoint requires TLS; set `DB_SSL=true` in Vercel.
-3. Connect to the database with MySQL Workbench or another MySQL client, select the provided database, and run `database/schema.sql` from this repository.
+1. Create a MySQL-compatible TiDB Cloud Starter instance. Set its monthly spending limit to `0` to stay within the free quota.
+2. In its **Connect** panel, choose the public endpoint and copy the host and username. Generate a database password and keep it private. The endpoint uses port `4000` and requires TLS.
+3. Create a database named `campus_rating`, select it, and run `database/schema.sql` from this repository.
 
 TiDB Starter currently includes, per eligible instance, 5 GiB row storage, 5 GiB columnar storage, and 50 million request units per month. A free instance restricts new operations after its quota is reached until the quota resets. Check the current [TiDB Starter plan details](https://docs.pingcap.com/tidbcloud/select-cluster-tier/) before deployment.
 
 ## 2. Deploy the API
 
-1. In Vercel, import the GitHub repository as a new project. Set **Root Directory** to `backend` and leave the detected Express framework settings in place. Vercel runs the exported Express app as a Function; local development still uses `npm run dev`.
+1. In Vercel, import the GitHub repository as a new project. Set **Root Directory** to `backend` and **Framework Preset** to Express. Vercel runs the exported Express app as a Function; local development still uses `npm run dev`.
 2. Add these **Production** environment variables in the API project's settings:
 
    ```dotenv
@@ -20,29 +22,29 @@ TiDB Starter currently includes, per eligible instance, 5 GiB row storage, 5 GiB
    DB_PORT=4000
    DB_USER=your-tidb-user
    DB_PASSWORD=your-tidb-password
-   DB_NAME=your-tidb-database
+   DB_NAME=campus_rating
    DB_SSL=true
    JWT_SECRET=use-a-long-random-secret
-   CORS_ORIGINS=http://localhost:5173
+   CORS_ORIGINS=https://campus-rating.vercel.app
    ```
 
-   Use the host, port, username, and database name shown by TiDB. Keep the database password and JWT secret in Vercel environment settings; do not commit them. The initial CORS value is for local development and can be replaced after the frontend is deployed.
-3. Deploy and copy the API project's production domain, for example `https://campusly-api.vercel.app`.
+   Keep the database password and JWT secret in Vercel environment settings; do not commit them.
+3. Deploy the API at `https://campus-rating-api.vercel.app`.
 
 ## 3. Deploy the frontend
 
 1. Import the same GitHub repository again as a second Vercel project. Set **Root Directory** to `frontend`; Vercel detects Vite. `frontend/vercel.json` routes browser deep links back to the SPA entry page.
-2. Add this **Production** environment variable, replacing the example with the API domain from the previous step:
+2. Add this **Production** environment variable:
 
    ```dotenv
-   VITE_API_URL=https://campusly-api.vercel.app/api
+   VITE_API_URL=https://campus-rating-api.vercel.app/api
    ```
 
-3. Deploy the frontend and copy its production domain, for example `https://campusly.vercel.app`.
+3. Deploy the frontend at `https://campus-rating.vercel.app`.
 
 ## 4. Allow the frontend to call the API
 
-In the API project's Vercel settings, set `CORS_ORIGINS` to the exact frontend production origin (scheme and hostname, with no path), such as `https://campusly.vercel.app`. Include additional comma-separated origins only if you want them to access the API. Redeploy the API after changing the variable.
+In the API project's Vercel settings, set `CORS_ORIGINS` to the exact frontend production origin (scheme and hostname, with no path): `https://campus-rating.vercel.app`. Include additional comma-separated origins only if you want them to access the API. Redeploy the API after changing the variable.
 
 Both projects can deploy automatically from GitHub. Vercel supports multiple projects connected to one repository with a different root directory for each project. See [Vercel's monorepo guide](https://vercel.com/docs/monorepos), [Express deployment guide](https://vercel.com/docs/frameworks/backend/express), and [Vite SPA routing guide](https://vercel.com/docs/frameworks/frontend/vite).
 

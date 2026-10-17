@@ -1,4 +1,3 @@
-```sql
 -- Campus Rating App
 -- MySQL Database Schema
 
@@ -84,4 +83,3 @@ CREATE INDEX idx_ratings_user
 
 CREATE INDEX idx_ratings_store
     ON ratings(store_id);
-```
