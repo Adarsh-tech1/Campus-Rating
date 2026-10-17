@@ -24,8 +24,6 @@ const SUCCESS_MESSAGES = {
   [ROLES.USER]: "Your account is ready. Sign in to explore campus.",
   [ROLES.STORE_OWNER]:
     "Your owner account is ready. Sign in to add your place.",
-  [ROLES.ADMIN]:
-    "Your administrator account is ready. Sign in to open the dashboard.",
 };
 
 export default function Register() {

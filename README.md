@@ -183,13 +183,14 @@ Local-only `.env` files, `node_modules/`, and Vite's generated `frontend/dist/` 
 
 ### 1. Create the database
 
-Execute [database/schema.sql](database/schema.sql) in MySQL Workbench, or use the MySQL command-line client:
+Create the local database, then load the schema in MySQL Workbench or with the MySQL command-line client:
 
 ```sh
-mysql -u root -p < database/schema.sql
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS campus_rating;"
+mysql -u root -p campus_rating < database/schema.sql
 ```
 
-This creates the `campus_rating` database and the `users`, `stores`, and `ratings` tables.
+This creates the `users`, `stores`, and `ratings` tables in `campus_rating`.
 
 ### 2. Configure and start the backend
 
@@ -210,6 +211,7 @@ Set the database connection and JWT secret in `backend/.env`:
 ```dotenv
 PORT=5000
 DB_HOST=localhost
+DB_PORT=3306
 DB_USER=your_mysql_user
 DB_PASSWORD=your_mysql_password
 DB_NAME=campus_rating
@@ -217,6 +219,8 @@ JWT_SECRET=replace_with_a_long_random_secret
 ```
 
 `PORT` is optional and defaults to `5000`. `CORS_ORIGINS` is an optional comma-separated list of allowed frontend origins. By default, the API allows `http://localhost:3000` and `http://localhost:5173`.
+
+Public registration creates `USER` and `STORE_OWNER` accounts. To create your first administrator locally, set `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in `backend/.env`, then run `npm run create-admin` from `backend/`. Remove those three values from `.env` afterward. Admins can create additional accounts through the protected admin dashboard.
 
 ```sh
 cd backend
@@ -315,7 +319,7 @@ Foreign keys maintain store ownership and remove ratings when the related user o
 
 ## Security note
 
-Public registration currently allows visitors to choose `ADMIN`. Do not deploy this configuration publicly. To restrict it, remove `ADMIN` from both the backend registration allowlist and the frontend role options. Hiding the option in the frontend alone does not prevent direct API requests.
+Public registration does not grant `ADMIN`. The API enforces the role allowlist, and the initial administrator is created with the one-time `create-admin` command. See [DEPLOYMENT.md](DEPLOYMENT.md) for the free Render and TiDB setup.
 
 Never commit `backend/.env` or `frontend/.env`. Keep database credentials and the JWT secret private.
 #   C a m p u s - R a t i n g  

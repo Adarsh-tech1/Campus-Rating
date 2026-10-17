@@ -2,8 +2,9 @@
 -- Campus Rating App
 -- MySQL Database Schema
 
-CREATE DATABASE IF NOT EXISTS campus_rating;
-USE campus_rating;
+-- Run this file after selecting the target database. For local development,
+-- create campus_rating first, then run:
+--   mysql -u root -p campus_rating < database/schema.sql
 
 -- =========================
 -- USERS TABLE

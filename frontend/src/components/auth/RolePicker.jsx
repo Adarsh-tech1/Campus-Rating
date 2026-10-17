@@ -1,4 +1,4 @@
-import { GraduationCap, ShieldCheck, Store } from "lucide-react";
+import { GraduationCap, Store } from "lucide-react";
 import { ROLE_LABELS, ROLES } from "../../utils/constants.js";
 
 /**
@@ -19,13 +19,6 @@ export const ROLE_OPTIONS = [
     headline: "Store Owner",
     description: "Add your store and see customer ratings.",
     icon: Store,
-  },
-  {
-    value: ROLES.ADMIN,
-    label: ROLE_LABELS.ADMIN,
-    headline: "Admin",
-    description: "Manage the Campusly platform.",
-    icon: ShieldCheck,
   },
 ];
 

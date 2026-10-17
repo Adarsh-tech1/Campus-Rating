@@ -31,9 +31,10 @@ const passwordValidator = (field) =>
     .matches(/[^A-Za-z0-9]/)
     .withMessage("Password must contain at least one special character");
 
-// Public registration accepts all three roles. The UI mirrors this list, and
-// every other role is still rejected by the isIn() check below.
-const REGISTER_ROLES = ["USER", "STORE_OWNER", "ADMIN"];
+// Public registration must never grant administrator access. The first admin
+// account is bootstrapped with the create-admin script; later admins are added
+// through the protected admin endpoint.
+const REGISTER_ROLES = ["USER", "STORE_OWNER"];
 
 const registerValidator = [
   ...identityValidators(),
@@ -51,7 +52,7 @@ const adminCreateUserValidator = [
     .notEmpty()
     .withMessage("Role is required")
     .isIn(["USER", "ADMIN", "STORE_OWNER"])
-    .withMessage("Role must be USER , ADMIN or STORE_OWNER"),
+    .withMessage("Role must be USER, ADMIN or STORE_OWNER"),
 ];
 
 const loginValidator = [
